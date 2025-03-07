@@ -3,63 +3,71 @@ package org.example;
 import com.hankcs.hanlp.HanLP;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        String original = "src/main/java/org/example/orig.text";
-
-        String plagiarizedFile1 = "src/main/java/org/example/orig_add1.text";
-        //String plagiarizedFile2 = "src/main/java/org/example/orig_add2.text";
-        //String plagiarizedFile3 = "src/main/java/org/example/orig_add3.text";
-        //String plagiarizedFile4 = "src/main/java/org/example/orig_add4.text";
-        //String plagiarizedFile5 = "src/main/java/org/example/orig_add5.text";
-
-        String outputFile = "src/main/java/org/example/output.text";
+        // 检查参数数量
+        if (args.length != 3) {
+            System.out.println("错误：程序需要三个参数：");
+            System.out.println("1. 原始文件路径");
+            System.out.println("2. 抄袭文件路径");
+            System.out.println("3. 输出结果文件路径");
+            return;
+        }
 
         try {
-            //读取文本内容
-            String originalText = readFile(original);
-            String plagiarizedText1 = readFile(plagiarizedFile1);
-            //String plagiarizedText2 = readFile(plagiarizedFile2);
-            //String plagiarizedText3 = readFile(plagiarizedFile3);
-            //String plagiarizedText4 = readFile(plagiarizedFile4);
-            //String plagiarizedText5 = readFile(plagiarizedFile5);
+            // 检查文件是否存在
+            Path originalPath = Paths.get(args[0]);
+            Path plagiarizedPath = Paths.get(args[1]);
+            Path outputPath = Paths.get(args[2]);
 
-            // 预处理文本
-            List<String> originalWords = preprocessText(originalText);
-            List<String> plagiarizedWords1 = preprocessText(plagiarizedText1);
-            //List<String> plagiarizedWords2 = preprocessText(plagiarizedText2);
-            //List<String> plagiarizedWords3 = preprocessText(plagiarizedText3);
-            //List<String> plagiarizedWords4 = preprocessText(plagiarizedText4);
-            //List<String> plagiarizedWords5 = preprocessText(plagiarizedText5);
-//
-            // 计算查重率
-            double similarity1 = calculateSimilarity(originalWords,plagiarizedWords1);
-            //double similarity2 = calculateSimilarity(originalWords,plagiarizedWords2);
-            //double similarity3 = calculateSimilarity(originalWords,plagiarizedWords3);
-            //double similarity4 = calculateSimilarity(originalWords,plagiarizedWords4);
-            //double similarity5 = calculateSimilarity(originalWords,plagiarizedWords5);
+            if (!Files.exists(originalPath)) {
+                System.out.println("错误：原始文件不存在：" + args[0]);
+                return;
+            }
+            if (!Files.exists(plagiarizedPath)) {
+                System.out.println("错误：抄袭文件不存在：" + args[1]);
+                return;
+            }
 
-            System.out.println("文本1的查重率：" + similarity1 * 100 + "%\n");
-            //System.out.println("文本2的查重率：" + similarity2 * 100 + "%\n");
-            //System.out.println("文本3的查重率：" + similarity3 * 100 + "%\n");
-            //System.out.println("文本4的查重率：" + similarity4 * 100 + "%\n");
-            //System.out.println("文本5的查重率：" + similarity5 * 100 + "%\n");
+            // 检查文件是否可读
+            if (!Files.isReadable(originalPath)) {
+                System.out.println("错误：无法读取原始文件：" + args[0]);
+                return;
+            }
+            if (!Files.isReadable(plagiarizedPath)) {
+                System.out.println("错误：无法读取抄袭文件：" + args[1]);
+                return;
+            }
 
-            writeFile(outputFile,similarity1);
-            //writeFile(outputFile,similarity2);
-            //writeFile(outputFile,similarity3);
-            //writeFile(outputFile,similarity4);
-            //writeFile(outputFile,similarity5);
+            // 读取并处理文件
+            List<String> original = preprocessText(Files.readString(originalPath, StandardCharsets.UTF_8));
+            List<String> plagiarized = preprocessText(Files.readString(plagiarizedPath, StandardCharsets.UTF_8));
+            double similarity = calculateSimilarity(original, plagiarized);
+            
+            // 输出结果
+            String result = String.format("查重率：%.2f%%", similarity * 100);
+            System.out.println(result);
+            
+            // 写入结果文件
+            try {
+                Files.writeString(outputPath, result, StandardCharsets.UTF_8);
+                System.out.println("结果已保存到：" + args[2]);
+            } catch (IOException e) {
+                System.out.println("错误：无法写入结果文件：" + args[2]);
+                System.out.println("错误详情：" + e.getMessage());
+            }
 
-            System.out.println("查重率写入成功\n");
-            System.out.println("查重完成，结果已保存至 " + outputFile);
-            System.out.println("\n");
-
-        }catch (Exception e){
-            System.out.println("Error:文件读取错误\n");
+        } catch (Exception e) {
+            System.out.println("错误：程序执行出错");
+            System.out.println("错误详情：" + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -102,8 +110,6 @@ public class Main {
 
         if (originalWords.isEmpty() || plagiarizedWords.isEmpty()) {
             return 0.0;//其中任一文本为空，则查重率为0
-        } else if (originalWords.isEmpty() && plagiarizedWords.isEmpty()) {
-            return 1.0;//两个文本都为空，则查重率为1
         }
 
         // 合并所有词汇
@@ -132,7 +138,7 @@ public class Main {
     }
 
     // 统计词频
-    private static Map<String, Integer> getWordFrequency(List<String> words) {
+    public static Map<String, Integer> getWordFrequency(List<String> words) {
         Map<String, Integer> frequencyMap = new HashMap<>();
         for (String word : words) {
             frequencyMap.put(word, frequencyMap.getOrDefault(word, 0) + 1);
