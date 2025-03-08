@@ -12,7 +12,7 @@ public class Tools {
         return HanLP.segment(text)//对text分词
                 .stream()
                 // 移除标点符号和数字，并转换为小写
-                .map(term -> term.word.replaceAll("[^\\p{L}\\p{N}]", "").toLowerCase())
+                .map(term -> term.word.replaceAll("[^\\p{Script=Han}\\p{L}]", "").toLowerCase())
                 //除去空字符串
                 .filter(word -> !word.isEmpty())
                 //收集处理后的词
@@ -21,9 +21,9 @@ public class Tools {
 
     //计算查重率(采用计算余弦相似度的值)
     public double calculateSimilarity(List<String> originalWords, List<String> plagiarizedWords){
-
+        //其中任一文本为空，则查重率为0
         if (originalWords.isEmpty() || plagiarizedWords.isEmpty()) {
-            return 0.0;//其中任一文本为空，则查重率为0
+            return 0.0;
         }
 
         // 合并所有词汇
