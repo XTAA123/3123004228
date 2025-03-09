@@ -13,9 +13,9 @@ public class Main {
         String plagiarizedPath = filePaths[1];
         String outputPath = filePaths[2];
 
-//        String originalPath = "D:\\code\\finalwork\\src\\test\\orig.text";
-//        String plagiarizedPath = "D:\\code\\finalwork\\src\\test\\orig_add5.text";
-//        String outputPath = "D:\\code\\finalwork\\src\\test\\output.text";
+//        String originalPath = "D:\\code\\finalwork\\src\\test\\orig.txt";
+//        String plagiarizedPath = "D:\\code\\finalwork\\src\\test\\orig_0.8_dis_1.txt";
+//        String outputPath = "D:\\code\\finalwork\\src\\test\\output.txt";
 
         //预处理文本
         List<String> original = tools.preprocessText(originalPath);

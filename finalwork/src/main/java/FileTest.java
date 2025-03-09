@@ -12,7 +12,7 @@ public class FileTest {
     void testReadFile_NormalCase() {
 
         // 准备测试数据
-        String[] args = {"D:\\code\\finalwork\\src\\test\\orig.text", "D:\\code\\finalwork\\src\\test\\orig_add1.text", "D:\\code\\finalwork\\src\\test\\output.text"};
+        String[] args = {"D:\\code\\finalwork\\src\\test\\orig.text", "D:\\code\\finalwork\\src\\test\\orig_add1.text", "D:\\code\\finalwork\\src\\test\\output.txt"};
 
         // 创建测试文件
         createTestFile(args[0], "这是原始文件内容");
@@ -48,7 +48,7 @@ public class FileTest {
     @Test
     void testReadFile_OriginalFileNotExist() {
         // 准备测试数据
-        String[] args = {"src/test/resources/nonexistent.txt", "D:\\code\\finalwork\\src\\test\\orig_add1.text", "D:\\code\\finalwork\\src\\test\\output.text"};
+        String[] args = {"src/test/resources/nonexistent.txt", "D:\\code\\finalwork\\src\\test\\orig_add1.text", "D:\\code\\finalwork\\src\\test\\output.txt"};
         // 创建抄袭文件
         createTestFile(args[1], "这是抄袭文件内容");
         // 调用方法
@@ -63,7 +63,7 @@ public class FileTest {
     @Test
     void testReadFile_PlagiarizedFileNotExist() {
         // 准备测试数据
-        String[] args = {"D:\\code\\finalwork\\src\\test\\orig.text", "src/test/resources/nonexistent.txt", "D:\\code\\finalwork\\src\\test\\output.text"};
+        String[] args = {"D:\\code\\finalwork\\src\\test\\orig.text", "src/test/resources/nonexistent.txt", "D:\\code\\finalwork\\src\\test\\output.txt"};
         // 创建原始文件
         createTestFile(args[0], "这是原始文件内容");
         // 调用方法
@@ -78,7 +78,7 @@ public class FileTest {
     @Test
     void testReadFile_OriginalFileNotReadable() {
         // 准备测试数据
-        String[] args = {"D:\\code\\finalwork\\src\\test\\orig.text", "D:\\code\\finalwork\\src\\test\\orig_add1.text", "D:\\code\\finalwork\\src\\test\\output.text"};
+        String[] args = {"D:\\code\\finalwork\\src\\test\\orig.text", "D:\\code\\finalwork\\src\\test\\orig_add1.text", "D:\\code\\finalwork\\src\\test\\output.txt"};
 
         // 创建不可读的原始文件
         createTestFile(args[0], "这是原始文件内容");
@@ -95,7 +95,7 @@ public class FileTest {
     @Test
     void testReadFile_PlagiarizedFileNotReadable() {
         // 准备测试数据
-        String[] args = {"D:\\code\\finalwork\\src\\test\\orig.text", "D:\\code\\finalwork\\src\\test\\orig_add1.text", "D:\\code\\finalwork\\src\\test\\output.text"};
+        String[] args = {"D:\\code\\finalwork\\src\\test\\orig.text", "D:\\code\\finalwork\\src\\test\\orig_add1.text", "D:\\code\\finalwork\\src\\test\\output.txt"};
 
         // 创建原始文件
         createTestFile(args[0], "这是原始文件内容");
@@ -136,4 +136,6 @@ public class FileTest {
             fail("设置文件不可读失败：" + e.getMessage());
         }
     }
+
+
 }
